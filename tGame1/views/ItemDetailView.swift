@@ -11,7 +11,7 @@ import SwiftData
 
 
 struct ViewTop: View {
-    @Binding var selectedItem: Item?
+    @Binding var selectedItem: ItemData?
     var body: some View {
         VStack {
             if let item = selectedItem {
@@ -37,7 +37,8 @@ struct ViewTop: View {
 
 struct ItemDetailView: View {
     @State private var showBottomView: Bool = true
-    @Binding var selectedItem: Item?
+    @Binding var selectedItem: ItemData?
+//    @Bindable var gameData: GameData
     
     var body: some View {
         
@@ -45,7 +46,7 @@ struct ItemDetailView: View {
         VSplitView(content: {
             ViewTop(selectedItem: $selectedItem)
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100, maxHeight: .infinity)
-            GameConsoleView(showBottomSheet: $showBottomView)
+            GameConsoleView( showBottomSheet: $showBottomView)
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         

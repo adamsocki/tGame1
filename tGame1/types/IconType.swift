@@ -11,6 +11,7 @@ import SwiftData
 
 // Define the Enum (enhanced with Identifiable and systemImageName)
 enum IconType: String, CaseIterable, Identifiable {
+    case person
     case house
     case map
     case car
@@ -21,6 +22,7 @@ enum IconType: String, CaseIterable, Identifiable {
     
     var systemImageName: String {
         switch self {
+        case .person: return "person.2.crop.square.stack"
         case .house: return "house"
         case .map: return "map.fill" // Use the correct SF Symbol name
         case .car: return "car"

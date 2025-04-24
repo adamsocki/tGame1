@@ -31,7 +31,7 @@ enum ItemSidebarViewState:  Codable{
 }
 
 @Model
-final class Item {
+final class ItemData {
     var timeCreated: CFTimeInterval
     var score: Int
     var state: ItemState = ItemState.val0
@@ -47,7 +47,6 @@ final class Item {
     }
     
     func setState(to newState: ItemState) {
-        // Avoid triggering unnecessary updates if the state is already correct
         guard self.state != newState else { return }
         self.state = newState
         print("Item state set to: \(self.state)")
@@ -60,19 +59,19 @@ final class Item {
     }
     
     func updateStateBasedOnScore() {
-        var newState = ItemState.val0 // Default
+        var newState = ItemState.val0 
         switch self.score {
-        case ..<0: // Handle negative scores?
-            newState = .val0 // Or some error state
+        case ..<0:
+            newState = .val0
         case 0..<10:
             newState = .val0
         case 10..<20:
             newState = .val1
         case 20..<30:
             newState = .val2
-            // ... add more ranges as needed
-        default: // Score >= 150
-            newState = .val3 // Or highest relevant state
+            // ... add more ranges
+        default:
+            newState = .val3
         }
         setState(to: newState)
     }

@@ -13,7 +13,7 @@ import MapKit
 
 struct ItemState0GroupView: View {
     
-    @Bindable var item: Item
+    @Bindable var item: ItemData
     
     var body: some View {
         Button(action: {
@@ -27,7 +27,7 @@ struct ItemState0GroupView: View {
 }
 
 struct ItemState1GroupView: View {
-    @Bindable var item: Item
+    @Bindable var item: ItemData
     var body: some View {
         Text("ItemStateViews")
         
@@ -50,7 +50,7 @@ struct ItemState1GroupView: View {
 }
 
 struct ItemState2GroupView: View {
-    @Bindable var item: Item
+    @Bindable var item: ItemData
     var body: some View {
         VStack {
             Button(action: {
@@ -64,7 +64,7 @@ struct ItemState2GroupView: View {
 }
 
 struct ItemState3GroupView: View {
-    @Bindable var item: Item
+    @Bindable var item: ItemData
     var body: some View {
         VStack {
             Button(action: {

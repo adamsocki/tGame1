@@ -12,9 +12,10 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Query private var items: [ItemData]
     
-    @State var selectedItem: Item?
+    @State var selectedItem: ItemData?
+    @State var selectedPerson: PersonData?
     
 //    @State private var multiSelection = Set<UUID>()
     
@@ -29,7 +30,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationSplitView {
-            SidebarView(selectedItem: $selectedItem, selectedIconType: $selectedIconType)
+            SidebarView(selectedItem: $selectedItem, selectedIconType: $selectedIconType, selectedPerson: $selectedPerson)
         } detail: {
             ItemDetailView(selectedItem: $selectedItem)
         }
@@ -39,10 +40,9 @@ struct ContentView: View {
 //        .foregroundStyle(.white)
     }
     
+
     
-  
-    
-    private func deleteItem(itemToDelete: Item) {
+    private func deleteItem(itemToDelete: ItemData) {
         modelContext.delete(itemToDelete)
     }
     
@@ -62,7 +62,7 @@ struct ContentView: View {
     
 }
 
-#Preview {
-    ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
-}
+//#Preview {
+//    ContentView()
+//        .modelContainer(for: ItemData.self, inMemory: true)
+//}

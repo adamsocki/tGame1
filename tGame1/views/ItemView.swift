@@ -15,7 +15,7 @@ import Combine
 
 
 struct ItemView: View {
-    var item: Item
+    var item: ItemData
     
     @Environment(\.modelContext) private var modelContext
     @Query private var gameDatas: [GameData]

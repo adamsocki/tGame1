@@ -12,15 +12,19 @@ import SwiftData
 struct tGame1App: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            ItemData.self,
             GameData.self,
+            PersonData.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
             let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
             let newGameData = GameData(score: 0)
+            
             container.mainContext.insert(newGameData)
+//            let newPerson_1 = PersonData(age: 37, name: "Adam Socki")
+//            container.mainContext.insert(newPerson_1)
             
             return container
         } catch {
