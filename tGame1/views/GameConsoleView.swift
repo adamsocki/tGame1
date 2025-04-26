@@ -12,6 +12,8 @@ struct GameConsoleView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var gameDatas: [GameData]
     
+    
+    
     @Binding var showBottomSheet: Bool
     
     var body: some View {
@@ -48,8 +50,9 @@ struct GameConsoleView: View {
                         Text("HI")
                         Spacer()
                     }
-                    .frame(maxWidth: .infinity) // Ensure it takes full width
+                    .frame(maxWidth: .infinity) 
                     .background(Color.blue.opacity(0.2))
+                    // RIGHT SIDE
                     
                     VStack {
                         HStack {
@@ -61,12 +64,8 @@ struct GameConsoleView: View {
                         Text("Bottom Sheet Content Here")
                         Spacer()
                     }
-                    .frame(maxWidth: .infinity) // Ensure it takes full width
-                    // Give it a flexible height or fixed height as needed
-                    
-                    .background(Color.green.opacity(0.2)) // Background for content area
-                    // *** Apply transition to the view being added/removed ***
-    //                .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .frame(maxWidth: .infinity)
+                    .background(Color.green.opacity(0.2))
                 }
                 .frame(minHeight: 60, idealHeight: 140, maxHeight: 350)
                 .frame(minHeight: 60, idealHeight: 140, maxHeight: 350)

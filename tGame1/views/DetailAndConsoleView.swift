@@ -35,10 +35,13 @@ struct ViewTop: View {
 
 
 
-struct ItemDetailView: View {
+struct ConsoleAndDetailView: View {
     @State private var showBottomView: Bool = true
     @Binding var selectedItem: ItemData?
 //    @Bindable var gameData: GameData
+    
+    @ObservedObject var gameManager: GameManager
+    
     
     var body: some View {
         

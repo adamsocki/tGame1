@@ -30,6 +30,7 @@ struct SidebarView: View {
                 Divider()
                 HStack {
                     ForEach(IconType.allCases) { iconType in
+                        
                         Button(action: {
                             self.selectedIconType = iconType
                         }, label: {

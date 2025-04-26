@@ -36,13 +36,41 @@ struct PersonSidebarView : View {
                     }
                     .padding()
                 }
+                .contextMenu {
+                    Button(action: {
+                        deletePerson(personToDelete: person)
+                    }, label: {
+                        Label("Delete Person", systemImage: "minus")
+                    })
+                }
             }
+            
             
             Spacer()
         }
-       
-        
-        
+        .contextMenu {
+            Button(action: {
+                addPerson()
+            }, label: {
+                Label("Add Person", systemImage: "plus")
+            })
+           
+        }
     }
+    
+    private func addPerson() {
+        withAnimation {
+            let newPerson = PersonData(age: 0, name: "name1")
+            modelContext.insert(newPerson)
+            selectedPerson = newPerson
+        }
+    }
+    
+    private func deletePerson(personToDelete: PersonData) {
+        withAnimation {
+            modelContext.delete(personToDelete)
+        }
+    }
+
     
 }
