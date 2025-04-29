@@ -7,28 +7,29 @@
 
 import Foundation
 
-
-
-struct TaskData: Decodable, Identifiable {
-    // You might want an ID from JSON if tasks need unique reference beyond order
-    // let taskId: String
-    let id = UUID() // Or use taskId if defined above. This is for SwiftUI.
-    let description: String // Text shown to player (e.g., "Collect 5 herbs")
-    let type: String        // Type of task (e.g., "fetch", "kill", "talk", "goto")
-    let target: String?     // ID of item, NPC, location, enemy type etc. (optional)
-    let quantity: Int?      // Optional quantity (e.g., for fetch/kill tasks)
-
-    // CodingKeys to map JSON keys if they differ, or just to be explicit
-    private enum CodingKeys: String, CodingKey {
-        // case taskId
-        case description
-        case type
-        case target
-        case quantity
-    }
+enum TaskType: String, Codable, CaseIterable {
+    case talk       // Talk to an NPC
+    case collect    // Collect N items
+    case defeat     // Defeat N enemies
+    case reach      // Reach a specific location
+    case interact   // Interact with an object
+    // Add other task types as needed
 }
 
 
+struct TaskData: Codable, Identifiable { // Identifiable can be useful
+    let id: Int              // Unique ID for the task within the quest (e.g., 0, 1, 2...)
+    let type: String         // The task type as a string (maps to TaskType enum)
+    let description: String  // Text describing the task objective
+    let target: String?      // Optional: NPC name, item ID, location name, etc.
+    let quantity: Int?       // Optional: Number of items, enemies, etc. (defaults to 1 if nil)
+
+    // Add other relevant data fields that might come from JSON
+    // E.g., prerequisiteTaskId: Int?
+}
+
+
+// QuestData is created and stocked by the JSON loading process
 struct QuestData: Decodable, Identifiable {
     let id: String          // Unique ID matching QuestType rawValue (e.g., "introQuest")
     let name: String        // Display name of the quest (e.g., "A Humble Beginning")
@@ -39,7 +40,7 @@ struct QuestData: Decodable, Identifiable {
 }
 
 class QuestManager: ObservableObject {
-//    @Published var questNodes: [QuestNode] = []
+    //    @Published var questNodes: [QuestNode] = []
     private var questDefinitions: [String: QuestData] = [:]
     
     @Published var activeQuests: [QuestType: Quest] = [:]
@@ -48,7 +49,13 @@ class QuestManager: ObservableObject {
     
     init(filename: String = "quests.json") {
         loadQuestDefinitions(from: filename)
+        //
+        
+        
     }
+    
+    
+    //
     
     
     
@@ -93,4 +100,53 @@ class QuestManager: ObservableObject {
         }
         return true
     }
+    
+    
+    func offerQuest(_ type: QuestType) {
+        guard activeQuests[type] == nil && !completedQuests.contains(type) else {
+            print("quest \(type.rawValue) is already active or completed")
+            return
+        }
+        
+        guard let questDefinition = getQuestDefinition(for: type) else {
+            print("No quest definition found for \(type.rawValue)")
+            return
+        }
+        
+        // Check for Quest Prerequisites
+        let prerequisitesMet = checkQuestPrequisites(prerequisites: questDefinition.prerequisites)
+        guard prerequisitesMet else {
+            print("no can do, prerequisites not met for \(type.rawValue)")
+            return
+        }
+        
+        acceptQuest(type)
+    }
+    
+    func acceptQuest(_ type: QuestType) {
+        print("quest accepted \(type.rawValue)")
+        
+        guard let newQuest = createInGameQuest(for: type) else {
+            print("No accept Quest for \(type.rawValue)")
+            return
+        }
+        
+        activeQuests[type] = newQuest
+        
+    }
+    
+    
+    
+    func createInGameQuest(for type: QuestType) -> Quest? {
+        
+        guard let definition = getQuestDefinition(for: type) else {
+            print( "No quest definition found for \(type.rawValue)")
+            return nil
+        }
+        
+        let newQuest = Quest(data: definition)
+        return newQuest
+    }
+    
+    
 }

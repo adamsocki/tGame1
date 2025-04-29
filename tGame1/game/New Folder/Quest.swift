@@ -36,8 +36,28 @@ enum QuestType: String, CaseIterable {
 }
 
 
+//class Quest2 {
+//    let id: QuestType
+//    let name: String
+//    let description: String
+//    let tasks: [Task]
+//    
+//    
+//    init (definition: QuestData) {
+//        guard let questType = QuestType(rawValue: definition.id) else {
+//            fatalError("Quest ID '\(definition.id)' in json not found in QuestType")
+//        }
+//        
+//        self.id = questType
+//        self.name = definition.name
+//        self.description = definition.description
+//        self.tasks = definition.tasks.map{Task(data: $0)}
+//    }
+//}
+
+
 class Quest {
-    let id: QuestType
+    let id: String
     var tasks: [Task] = []
     
     
@@ -48,8 +68,8 @@ class Quest {
 //    let name: String
     
     
-    init( id: QuestType) {
-        self.id = id
+    init(data: QuestData) {
+        self.id = data.id
 //        self.name = name
         self.view = QuestView()
     }

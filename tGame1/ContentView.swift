@@ -53,8 +53,8 @@ struct ContentView: View {
         .sheet(isPresented: $showMainSheetView, onDismiss: {
             NotificationCenter.default.post(name: .gameStarted, object: nil)
         }, content: {
-//            MainSheetView(gameManager: gameManager, showMainSheetView: $showMainSheetView)
-            MainSheetView2(gameManager: gameManager, showMainSheetView: $showMainSheetView)
+            MainSheetView(gameManager: gameManager, dialogManager: gameManager.dialogManager, showMainSheetView: $showMainSheetView)
+//            MainSheetView2(gameManager: gameManager, showMainSheetView: $showMainSheetView)
             
         })
     }

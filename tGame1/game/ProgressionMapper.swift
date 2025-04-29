@@ -14,10 +14,10 @@ class ProgressionMapper {
    
     
     
-    let gameTasks: [GameTask: Task] =  [
-        //
-        .taskA: Task(id: .taskA, description: "taskA")
-    ]
+//    let gameTasks: [GameTask: Task] =  [
+//        //
+//        .taskA: Task(id: .taskA, description: "taskA")
+//    ]
     
     
     
@@ -65,8 +65,8 @@ class ProgressionMapper {
     
     private func makeTasks() {
         
-        let quest_1 = Quest(id: .introQuest)
-        quest_1.addTask(task: gameTasks[.taskA]!)
+//        let quest_1 = Quest(id: .introQuest)
+//        quest_1.addTask(task: gameTasks[.taskA]!)
         
         
     }

@@ -1,0 +1,17 @@
+
+
+
+
+[
+    {
+        "id": "intro_sequence",
+        "steps": [
+            {
+                "id": "game_intro_sheet_1",
+                "type": "showDialog"
+            }
+        ]
+    }
+    
+    
+]

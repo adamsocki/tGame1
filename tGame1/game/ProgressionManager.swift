@@ -4,7 +4,7 @@
 //
 //  Created by Adam Socki on 4/24/25.
 //
-
+import Combine
 import SwiftUI
 
 //enum CurrentTask {
@@ -20,7 +20,7 @@ enum CurrentGameState {
     case main
     case end
 }
-
+//
 class ProgressionManager: ObservableObject {
     
     let mapper: ProgressionMapper
@@ -30,64 +30,82 @@ class ProgressionManager: ObservableObject {
         
         self.mapper = mapper
         self.questManager = questManager
-        startListening()
+        startListeningForGameEvents()
+        
+        // THIS IS A GAME INIT QUEST
+        questManager.offerQuest(.introQuest)
     }
     
     @Published var currentGameState: CurrentGameState = CurrentGameState.intro
     
-    @Published var currentQuest: Quest = Quest(id: QuestType.introQuest)
+//    @Published var currentQuest: Quest = Quest(data: QuestType.introQuest)
+    
+    private var cancellables = Set<AnyCancellable>()
     
     
     
-    
-    
-    private func startListening() {
+    private func startListeningForGameEvents() {
         
         let nc = NotificationCenter.default
-        nc.addObserver(self, selector: #selector(handleGameStart), name: .gameStarted, object: nil)
+        nc.publisher(for: .gameDidStart).sink { [weak self] note in self?.handleGameEvent(note)}.store(in: &cancellables)
+//        nc.publiser(for: .)
+//        nc.addObserver(self, selector: #selector(handleGameStart), name: .gameStarted, object: nil)
         
-        nc.addObserver(self, selector: #selector(handleQuestEnder), name: .gameStarted, object: nil)
+//        nc.addObserver(self, selector: #selector(handleQuestEnder), name: .gameStarted, object: nil)
         
     }
     
     private func loadQuest(_ questId: QuestType) {
 //        self.currentQuest = Quest(id: questId)
+        
+//        questManager.offerQuest(questId)
     }
    
-   
-    
-    func offerQuest(_ type: QuestType) {
-        guard questManager.activeQuests[type] == nil && !questManager.completedQuests.contains(type) else {
-            print("quest \(type.rawValue) is already active or completed")
-            return
-        }
+    private func handleGameEvent(_ notification: Notification)
+    {
+        var questStateChanged = false
         
-        guard let questDefinition = questManager.getQuestDefinition(for: type) else {
-            print("No quest definition found for \(type.rawValue)")
-            return
-        }
+        //        var updates: [(QuestType, TaskUpdateType)] = []
         
-        // Check for Quest Prerequisites
-        let prerequisitesMet = questManager.checkQuestPrequisites(prerequisites: questDefinition.prerequisites)
-        guard prerequisitesMet else {
-            print("no can do, prerequisites not met for \(type.rawValue)")
-            return
+        for (questType, quest) in questManager.activeQuests {
+            guard var currentTask = quest.currentTask else { continue }
+            
+            if taskMatchesEvent(task: currentTask, notification: notification) {
+            }
+            
         }
     }
-    
-    
-    
-    
-    @objc private func handleGameStart(notification: Notification) {
-        debugPrint("gamestarted notification received")
+        
+    private func taskMatchesEvent(task: Task, notification: Notification) -> Bool {
+        
+        guard let userInfo = notification.userInfo else { return false }
+        
+//        switch task.type {
+//        case "display":
+////            guard notification.name == 
+//            
+//            
+//        default :
+//            break
+//        }
+//        
+        
+        
+        
+        
+        return false
     }
-    
-    @objc private func handleQuestEnder(notification: Notification) {
-        debugPrint("questEnder notification received")
-    }
-
-    
-    
+    //
+//    @objc private func handleGameStart(notification: Notification) {
+//        debugPrint("gamestarted notification received")
+//    }
+//    
+//    @objc private func handleQuestEnder(notification: Notification) {
+//        debugPrint("questEnder notification received")
+//    }
+//
+//    
+//    
 }
 
 

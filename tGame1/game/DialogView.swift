@@ -9,7 +9,9 @@
 import SwiftUI
 
 struct DialogView: View {
+    @EnvironmentObject var dialogManager: DialogManager
     var body: some View {
+        
         Text("Hello, Dialog!")
     }
 }

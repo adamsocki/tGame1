@@ -1,0 +1,96 @@
+[
+    {
+        "id": "intro_player_q1",
+        "player": "1",
+        "type": "player_thought",
+        "part": "1",
+        "seq": "1",
+        "text": "Where... where am I?",
+        "viewLocation": "sheet",
+        "next": "intro_voice_response1",
+        "choices": null
+    },
+    {
+        "id": "intro_voice_response1",
+        "player": "0",
+        "type": "gameVoice",
+        "part": "1",
+        "seq": "2",
+        "text": "You are where you need to be. For now.",
+        "viewLocation": "sheet",
+        "next": "intro_player_q2",
+        "choices": null
+    },
+    {
+        "id": "game_intro_sheet_1",
+        "player": "1",
+        "part": "1",
+        "seq": "1",
+        "type": "player",
+        "text": "where....where am i?",
+        "next": "game_intro_sheet_2",
+        "viewLocation": "sheet"
+    },
+    {
+        "id": "game_intro_sheet_2",
+        "player": "1",
+        "part": "1",
+        "seq": "2",
+        "type": "player",
+        "text": "did it...finally happen?",
+        "next": null,
+        "viewLocation": "sheet"
+    },
+    {
+        "id": "start",
+        "player": "1",
+        "part": "1",
+        "seq": "1",
+        "type": "player",
+        "text": "where....where am i?",
+        "next": "choice_light",
+        "viewLocation": "sheet"
+    },
+    {
+        "id": "1",
+        "player": "1",
+        "part": "2",
+        "seq": "1",
+        "type": "player",
+        "text": "i dunno....what happened?",
+        "next": "choice_light",
+        "viewLocation": "sheet"
+    },
+    {
+        "id": "2",
+        "player": "1",
+        "part": "1",
+        "seq": "3",
+        "type": "player",
+        "text": "i think i fell?",
+        "next": "choice_light",
+        "viewLocation": "sheet"
+    },
+    {
+        "id": "3",
+        "player": "0",
+        "type": "gameVoice",
+        "part": "1",
+        "seq": "1",
+        "text": "nothing happend, everything happened, nobody noticed.",
+        "next": "choice_light",
+        "viewLocation": "sheet"
+    },
+    {
+        "id": "4",
+        "player": "0",
+        "type": "gameVoice",
+        "part": "1",
+        "seq": "2",
+        "text": "it was all gone...",
+        "next": "choice_light",
+        "viewLocation": "sheet"
+    }
+    
+    
+]

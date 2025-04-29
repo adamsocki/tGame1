@@ -1,34 +1,22 @@
 [
-    {
-        "id": "introQuest",
-        "name": "welcome",
-        "description": "intro screen.",
-        "prerequisites": null,
-        "tasks": [
-            {
-                "description": "there is no now.",
-                "type": "display"
-            },
-            {
-                "description": "there is only tomorrow.",
-                "type": "display"
-            }
-            
-        ]
-    },
+    
     {
         "id": "firstLevel",
         "name": "Clearing the Rat Den",
         "description": "The cellar is infested with giant rats! Clear them out.",
-        "prerequisites": ["introQuest"],
+        "prerequisites": null,
         "tasks": [
             {
-                "description": "111.",
-                "type": "display"
+                "id": 1,
+                "description": "vala10.",
+                "type": "item_score",
+                "val_a_req": 10
             },
             {
-                "description": "123.",
-                "type": "display"
+                "id": 2,
+                "description": "valb20.",
+                "type": "item_score",
+                "val_b_req": 20
             }
             
         ]
