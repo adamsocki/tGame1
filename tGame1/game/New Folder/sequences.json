@@ -1,17 +1,11 @@
 
 
-
-
-[
-    {
-        "id": "intro_sequence",
+{
+    "intro_sequence": {
         "steps": [
-            {
-                "id": "game_intro_sheet_1",
-                "type": "showDialog"
-            }
+            { "id": "1", "stepType": "startScene", "sceneId": "scene_showMySheet" },
+            { "id": "2", "stepType": "startScene", "sceneId": "scene_showMyDialog" }
         ]
     }
-    
-    
-]
+}
+

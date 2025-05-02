@@ -13,8 +13,13 @@ import Foundation
 //    let text: String
 //    let next: String // The ID of the next dialog node
 //}
+
+protocol DialogPresenter {
+    
+}
 enum DialogViewLocation: String, Codable {
     case sheet          = "sheet"
+    case main_sheet     = "main_sheet"
     case sidebar        = "sidebar"
     case detail         = "detail"
     case console_left   = "console_left"
@@ -38,11 +43,20 @@ struct DialogNode: Decodable, Identifiable {
 
 
 
-class DialogManager: ObservableObject, UIProvider
+class DialogManager: ObservableObject
 {
-    func showSheet(contentID: String, completion: @escaping () -> Void) {
-        print("showSheet")
-    }
+    
+    // [x] Loads/Stores Dialog          --> loadAndStoreDialogData
+    // [ ] Manage Dialog Logic and Flow --> currentNodeId, advanceDialog,
+    // TODO: Handle Choice in Logic Flow
+    
+    
+                                            
+                    
+//    
+//    func showSheet(contentID: String, completion: @escaping () -> Void) {
+//        print("showSheet")
+//    }
     
     @Published private(set) var dialogNodes: [String: DialogNode] = [:]
     @Published var isActive: Bool = false
@@ -52,10 +66,13 @@ class DialogManager: ObservableObject, UIProvider
     
     
     private var currentNodeId: String?
+    
+    private let presenter: DialogPresenter // <- access to the UI
         
    
-    init() {
-        self.dialogNodes = loadDialogData(filename: "dialog.json")
+    init(presenter: DialogPresenter, filename: String = "dialog.json") {
+        self.presenter = presenter
+        self.dialogNodes = loadAndStoreDialogData(filename: filename)
         printDialogTest()
     }
     private func printDialogTest() {
@@ -81,40 +98,56 @@ class DialogManager: ObservableObject, UIProvider
     
     // --- Method Called by SequenceManager (Implements DialogProvider) ---
     private var sequenceCompletionHandler: (() -> Void)?
-    func showDialog(dialogID: String, completion: @escaping () -> Void) {
-        print("DialogManager: Received request to show dialog starting with ID: \(dialogID)")
+    
+    func startDialogSequence(id: String, completion: @escaping () -> Void) {
         
-        guard let startNode = dialogNodes[dialogID] else {
-            print("Error: Dialog node with ID '\(dialogID)' not found.")
-            completion() // Call completion immediately if dialog can't start, so sequence isn't stuck
-            return
-        }
-
-        isActive = true
-        self.sequenceCompletionHandler = completion
-        
-        // Set the initial state for the UI
-        displayNode(startNode)
-        isActive = true
-        objectWillChange.send() // Notify observers
+    }
+    
+    func advanceDialog() {
         
     }
     
     
-    func advanceDialog()
-    {
-        guard isActive, let nodeId = currentNodeId, let currentNode = dialogNodes[nodeId] else {
-            return // No active dialog or node
-        }
-        
-        // Determine the next node ID (assuming no choices here)
-        let nextNodeId = currentNode.next // Get the 'next' ID from the current node data
-        
-        processNextStep(nextNodeId: nextNodeId)
-    }
     
     
-    private func processNextStep(nextNodeId: String?) {
+    
+    
+    
+    
+//    func showDialog(dialogID: String, completion: @escaping () -> Void) {
+//        print("DialogManager: Received request to show dialog starting with ID: \(dialogID)")
+//        
+//        guard let startNode = dialogNodes[dialogID] else {
+//            print("Error: Dialog node with ID '\(dialogID)' not found.")
+//            completion() // Call completion immediately if dialog can't start, so sequence isn't stuck
+//            return
+//        }
+//
+//        isActive = true
+//        self.sequenceCompletionHandler = completion
+//        
+//        // Set the initial state for the UI
+//        displayNode(startNode)
+//        isActive = true
+//        objectWillChange.send() // Notify observers
+//        
+//    }
+    
+    
+//    func advanceDialog()
+//    {
+////        guard isActive, let nodeId = currentNodeId, let currentNode = dialogNodes[nodeId] else {
+////            return // No active dialog or node
+////        }
+////        
+////        // Determine the next node ID (assuming no choices here)
+////        let nextNodeId = currentNode.next // Get the 'next' ID from the current node data
+////        
+////        processNextDialogStep(nextNodeId: nextNodeId)
+//    }
+    
+    
+    private func processNextDialogStep(nextNodeId: String?) {
         if let nextId = nextNodeId, let nextNode = dialogNodes[nextId] {
             // --- There is a next part ---
             print("DialogManager: Advancing to node ID: \(nextId)")
@@ -143,7 +176,7 @@ class DialogManager: ObservableObject, UIProvider
             return foundNode?.text
         }
 
-    private func loadDialogData(filename: String) -> [String: DialogNode] {
+    private func loadAndStoreDialogData(filename: String) -> [String: DialogNode] {
            guard let url = Bundle.main.url(forResource: filename, withExtension: nil) else {
                fatalError("Could not find \(filename).")
            }

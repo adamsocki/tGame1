@@ -63,12 +63,12 @@ class ProgressionManager: ObservableObject {
    
     private func handleGameEvent(_ notification: Notification)
     {
-        var questStateChanged = false
+//        var questStateChanged = false
         
         //        var updates: [(QuestType, TaskUpdateType)] = []
         
-        for (questType, quest) in questManager.activeQuests {
-            guard var currentTask = quest.currentTask else { continue }
+        for (_, quest) in questManager.activeQuests {
+            guard let currentTask = quest.currentTask else { continue }
             
             if taskMatchesEvent(task: currentTask, notification: notification) {
             }
@@ -78,7 +78,7 @@ class ProgressionManager: ObservableObject {
         
     private func taskMatchesEvent(task: Task, notification: Notification) -> Bool {
         
-        guard let userInfo = notification.userInfo else { return false }
+        guard notification.userInfo != nil else { return false }
         
 //        switch task.type {
 //        case "display":
@@ -95,17 +95,6 @@ class ProgressionManager: ObservableObject {
         
         return false
     }
-    //
-//    @objc private func handleGameStart(notification: Notification) {
-//        debugPrint("gamestarted notification received")
-//    }
-//    
-//    @objc private func handleQuestEnder(notification: Notification) {
-//        debugPrint("questEnder notification received")
-//    }
-//
-//    
-//    
 }
 
 

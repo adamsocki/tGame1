@@ -6,7 +6,7 @@
         "part": "1",
         "seq": "1",
         "text": "Where... where am I?",
-        "viewLocation": "sheet",
+        "viewLocation": "main_sheet",
         "next": "intro_voice_response1",
         "choices": null
     },

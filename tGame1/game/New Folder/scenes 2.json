@@ -1,0 +1,15 @@
+{
+    
+    "intro_to_game": {
+        "description": "test",
+        "onStartActions": [
+            { "actionType": "showSheet",  "targetID": "ui_main_sheet", "delay": 0.0},
+            { "actionType": "showDialog", "targetID": "ui_main_sheet", "delay": 0.0}
+        ],
+        "completionCondition": {
+            "conditionType": "sheetDismissed",
+            "targetID": "ui_main_sheet"
+        }
+    }
+    
+}

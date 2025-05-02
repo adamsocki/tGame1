@@ -1,0 +1,14 @@
+{
+    "intro_scene": {
+        "description": "test",
+        "onStartActions": [
+            { "id": "show_Sheet_intro1", "actionType": "showSheet", "targetID": "main_sheet", "delay": 3.0  },
+            { "id": "start_dialog_intro1", "actionType": "showDialog", "targetID": "intro_player_q1", "delay": 0.0  }
+        ],
+        "completionCondition": {
+            "id": "dismiss_sheet",
+            "conditionType": "sheetDismissed",
+            "targetID": "main_sheet"
+        }
+    }
+}

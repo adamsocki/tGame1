@@ -1,0 +1,11 @@
+{
+    "scene_showMySheet": {
+        "onStartActions": [
+            { "id": "action1", "actionType": "showSheet", "targetID": "main_sheet" }
+        ],
+        "completionCondition": {
+            "conditionType": "duration",
+            "value": 4.01
+        }
+    }
+}
