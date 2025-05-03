@@ -23,10 +23,10 @@ struct PersonSidebarView : View {
     @Environment(\.modelContext) private var modelContext
     @Query private var persons: [PersonData]
     
-    @Binding var selectedPerson: PersonData?
+    @ObservedObject var uiManager: UIManager
     
     var body: some View {
-        List(selection: $selectedPerson) {
+        List(selection: $uiManager.currentPersonSelected) {
             ForEach(persons) { person in
                 NavigationLink(value: person) {
                     HStack {
@@ -62,7 +62,7 @@ struct PersonSidebarView : View {
         withAnimation {
             let newPerson = PersonData(age: 0, name: "name1")
             modelContext.insert(newPerson)
-            selectedPerson = newPerson
+//            selectedPerson = newPerson
         }
     }
     

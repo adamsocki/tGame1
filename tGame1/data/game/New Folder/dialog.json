@@ -5,7 +5,7 @@
         "type": "player_thought",
         "part": "1",
         "seq": "1",
-        "text": "Where... where am I?",
+        "text": "where...where am I?",
         "viewLocation": "main_sheet",
         "next": "intro_voice_response1",
         "choices": null
@@ -16,9 +16,31 @@
         "type": "gameVoice",
         "part": "1",
         "seq": "2",
-        "text": "You are where you need to be. For now.",
-        "viewLocation": "sheet",
-        "next": "intro_player_q2",
+        "text": "You are where you need to be. For now...",
+        "viewLocation": "main_sheet",
+        "next": "intro_voice_response2",
+        "choices": null
+    },
+    {
+        "id": "intro_voice_response2",
+        "player": "0",
+        "type": "gameVoice",
+        "part": "1",
+        "seq": "2",
+        "text": "where are the others...?",
+        "viewLocation": "main_sheet",
+        "next": "intro_voice_response3",
+        "choices": null
+    },
+    {
+        "id": "intro_voice_response3",
+        "player": "0",
+        "type": "gameVoice",
+        "part": "1",
+        "seq": "2",
+        "text": "they're out there...go find them.",
+        "viewLocation": "main_sheet",
+        "next": null,
         "choices": null
     },
     {

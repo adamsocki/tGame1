@@ -8,17 +8,21 @@
 
 protocol UIProvider {
     func showSheet(contentID: String, completion: @escaping () -> Void)
+    func hideSheet(contentID: String, completion: @escaping () -> Void)
 }
+
 
 import SwiftUI
 
 class UIManager: ObservableObject, UIProvider, DialogPresenter {
     
+//    @Published var currentGameUnit:
+    @Published var currentUnitTypeSelected: UnitType? = .person
+    @Published var currentPersonSelected: PersonData? = nil
     
-    
+//    @ob
     
     //    @Published var currentDialogNode: DialogNode? = nil
-    
     
     // --- Dialog Presentation State --- //
     @Published var isSheetPresented: Bool = false
@@ -49,6 +53,24 @@ class UIManager: ObservableObject, UIProvider, DialogPresenter {
         }
     }
     
+    func hideSheet(contentID: String, completion: @escaping () -> Void) {
+        print("UIManager: Request to hide sheet for content: \(contentID)")
+        
+        guard isSheetPresented else {
+            print("UIManager: Warning - Tried to hide sheet while one was already hidden via sequence.")
+            completion() // Call completion immediately so sequence isn't stuck
+            return
+        }
+        
+        
+        self.currentSheetContentId = contentID
+        self.sheetCompletionHandler = completion
+        //        self.isSheetPresented = true
+        DispatchQueue.main.async {
+            self.isSheetPresented = false
+            print("UIManager: Set isSheetPresented = false on main thread")
+        }
+    }
     private func presentDialog(node: DialogNode, location: DialogViewLocation)
     {
         if currentDialogLocation != nil && currentDialogLocation != location { dismissDialog() }
@@ -81,6 +103,8 @@ class UIManager: ObservableObject, UIProvider, DialogPresenter {
         self.currentDialogNode = nil
         self.currentDialogLocation = nil
     }
+    
+    
     
     func updateDialogContent(node: DialogNode) { /* ... from previous */
         guard currentDialogLocation != nil else { return }

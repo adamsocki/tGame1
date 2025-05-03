@@ -1,0 +1,28 @@
+{
+    "scene_showMySheet": {
+        "onStartActions": [
+            { "id": "action1", "actionType": "showSheet", "targetID": "main_sheet", "userDismissable": false }
+        ],
+        "completionCondition": {
+            "conditionType": "duration",
+            "value": 0.01
+        }
+    },
+    "scene_showMyDialog1": {
+        "onStartActions": [
+            { "id": "dialog1", "actionType": "showDialog", "targetID": "intro_player_q1" }
+        ],
+        "completionCondition": {
+            "conditionType": "dialogEnd"
+        }
+    },
+    "scene_dismiss_main_sheet": {
+        "onStartActions": [
+            { "id": "action2", "actionType": "hideSheet", "targetID": "main_sheet" }
+        ],
+        "completionCondition": {
+            "conditionType": "duration",
+            "value": 0.01
+        }
+    }
+}

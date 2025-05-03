@@ -21,7 +21,7 @@ enum SceneCompletionType: String, Codable {
 
 
 enum SceneActionType: String, Codable {
-    case startMusic, stopMusic, playSound, showDialog, showSheet
+    case startMusic, stopMusic, playSound, showDialog, showSheet, hideSheet
     case showUIElement, hideUIElement, triggerEvent, startSequence
     // Add more actions as your game requires
 }
@@ -40,6 +40,7 @@ struct SceneDefinition: Codable, Identifiable {
     let description: String?
     let onStartActions: [SceneAction]
     let completionCondition: SceneCompletionCondition
+    let userDismissable: Bool?
     //
 }
 
@@ -209,7 +210,7 @@ class SceneManager: ObservableObject {
             } else {
                 print(" SceneManager Warning: Invalid duration '\(condition.value ?? -1)' for completion condition")
             }
-            
+        
         default:
             return
         }
@@ -229,6 +230,13 @@ class SceneManager: ObservableObject {
         case .showSheet:
             if let targetID = action.targetID {
                 uiManager.showSheet(contentID: targetID) {
+                    print("   SceneManager (\(sceneId)): UIManager dismissed sheet '\(targetID)', notification posted.")
+                }
+            } else { print("   ⚠️ Warning: showSheet action missing targetID.") }
+        
+        case .hideSheet:
+            if let targetID = action.targetID {
+                uiManager.hideSheet(contentID: targetID) {
                     print("   SceneManager (\(sceneId)): UIManager dismissed sheet '\(targetID)', notification posted.")
                 }
             } else { print("   ⚠️ Warning: showSheet action missing targetID.") }
@@ -258,7 +266,9 @@ class SceneManager: ObservableObject {
         case .duration:
             // Check if the event is timerExpired, potentially match targetID if timer had one
             conditionMet = (event == .timerExpired && (conditionTargetId == nil || conditionTargetId == targetId))
-            
+        case .dialogEnd:
+            conditionMet = (event == .dialogEnded && (conditionTargetId == nil || conditionTargetId == targetId))
+            print(" dialogEnd from checkSceneCompletion")
         default:
             return
         }

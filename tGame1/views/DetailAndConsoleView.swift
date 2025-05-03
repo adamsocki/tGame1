@@ -14,7 +14,7 @@ struct ViewTop: View {
     @Binding var selectedItem: ItemData?
     var body: some View {
         VStack {
-            if let item = selectedItem {
+             if let item = selectedItem {
                 HStack{
                     
                     ItemView(item: item)
@@ -47,7 +47,8 @@ struct ConsoleAndDetailView: View {
         
         
         VSplitView(content: {
-            ViewTop(selectedItem: $selectedItem)
+//            ViewTop(selectedItem: $selectedItem)
+            DetailView(uiManager: gameManager.uiManager)
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100, maxHeight: .infinity)
             GameConsoleView( showBottomSheet: $showBottomView)
         })

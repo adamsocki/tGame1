@@ -12,9 +12,11 @@ import SwiftData
 final class PersonData {
     var age: Int
     var name: String
+    var energy: Float?
     
     init (age: Int, name: String) {
         self.age = age
         self.name = name;
+        self.energy = 100
     }
 }

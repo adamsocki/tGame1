@@ -12,10 +12,12 @@ import Combine
 struct SequenceStep: Codable {
     enum StepType: String, Codable {
         case startScene
+        case assignQuest
     }
     
     let stepType: StepType
     let sceneId: String?
+    let questId: String?
 }
 
 struct SequenceDefinition: Codable, Identifiable {
@@ -168,6 +170,8 @@ class SequenceManager: ObservableObject {
             }
             // For startScene, step is NOT completed immediately. We wait for the callback.
             isProcessingStep = false // Ready for the completion callback
+        case .assignQuest:
+            print("Assign quest triggered in SequenceManager")
         default:
             print("   ⚠️ SequenceManager Warning: Unhandled step type '\(step.stepType)' at step \(currentStepIndex + 1). Skipping.")
             stepCompletedImmediately = true // Skip unknown steps

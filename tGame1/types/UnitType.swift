@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 
 // Define the Enum (enhanced with Identifiable and systemImageName)
-enum IconType: String, CaseIterable, Identifiable {
+enum UnitType: String, CaseIterable, Identifiable {
     case person
     case house
     case map

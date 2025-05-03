@@ -16,11 +16,14 @@ struct SidebarView: View {
     @Environment(\.modelContext) private var modelContext
     
     @Binding var selectedItem: ItemData?
-    @Binding var selectedIconType: IconType?
+//    @Binding var selectedUnitType: UnitType?
     
+//    @Binding var gameManager: GameManager
+    @ObservedObject var uiManager: UIManager
     
-    @Binding var selectedPerson: PersonData?
+//    @Binding var selectedPerson: PersonData?
     
+//    @State var selectedUnitType: UnitType?
     
     let selectedColor: Color = .blue
     
@@ -29,13 +32,13 @@ struct SidebarView: View {
             VStack {
                 Divider()
                 HStack {
-                    ForEach(IconType.allCases) { iconType in
+                    ForEach(UnitType.allCases) { unitType in
                         
                         Button(action: {
-                            self.selectedIconType = iconType
+                            uiManager.currentUnitTypeSelected = unitType
                         }, label: {
-                            let labelView = Label("", systemImage: iconType.systemImageName)
-                            if selectedIconType == iconType {
+                            let labelView = Label("", systemImage: unitType.systemImageName)
+                            if uiManager.currentUnitTypeSelected == unitType {
                                 labelView
                                     .foregroundStyle(selectedColor)
                             }
@@ -52,9 +55,9 @@ struct SidebarView: View {
                 Divider()
                     .padding(.vertical,-2)
                 
-                switch selectedIconType {
+                switch uiManager.currentUnitTypeSelected {
                 case .person:
-                    PersonSidebarView(selectedPerson: $selectedPerson)
+                    PersonSidebarView(uiManager: uiManager)
                 case .house:
                     ItemSidebarView(selectedItem: $selectedItem)
                 case .cat:

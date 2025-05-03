@@ -17,6 +17,7 @@ import Foundation
 protocol DialogPresenter {
     func presentDialogInMainSheet(node: DialogNode, location: DialogViewLocation)
     func dismissDialog()
+    func updateDialogContent(node: DialogNode)
 }
 enum DialogViewLocation: String, Codable {
     case sheet          = "sheet"
@@ -150,13 +151,26 @@ class DialogManager: ObservableObject
         }
     }
     
-    func advanceDialog() {
-        
-    }
-    
     
     
     private func endDialogSequence() {
+        let endedDialogRootId = self.currentDialogRootId ?? "N/A"
+        print("DialogManager: Ending dialog sequence (Root ID: \(endedDialogRootId)).")
+        
+        // Clear internal state
+        self.currentNodeId = nil
+        self.currentDialogRootId = nil
+        let poster = self.notificationPoster
+        self.notificationPoster = nil // Clear poster
+        
+        // Tell presenter to dismiss the UI FIRST
+        presenter.dismissDialog()
+        
+        // Call the stored closure which posts the notification and calls original completion
+        // Run async to ensure UI dismissal starts before notification fires
+        DispatchQueue.main.async {
+            poster?()
+        }
     }
     
     
@@ -182,17 +196,28 @@ class DialogManager: ObservableObject
 //    }
     
     
-//    func advanceDialog()
-//    {
-////        guard isActive, let nodeId = currentNodeId, let currentNode = dialogNodes[nodeId] else {
-////            return // No active dialog or node
-////        }
-////        
-////        // Determine the next node ID (assuming no choices here)
-////        let nextNodeId = currentNode.next // Get the 'next' ID from the current node data
-////        
-////        processNextDialogStep(nextNodeId: nextNodeId)
-//    }
+    func advanceDialog()
+    {
+        guard let currentId = currentNodeId, let currentNode = getNode(by: currentId) else { return }
+//               if let choices = currentNode.choices, !choices.isEmpty { return } // Use handleChoice
+        
+        if let nextNodeId = currentNode.next {
+            guard let nextNode = getNode(by: nextNodeId) else { endDialogSequence(); return }
+            self.currentNodeId = nextNode.id
+            presenter.updateDialogContent(node: nextNode) // Update UI content
+        } else {
+            endDialogSequence() // End of line
+        }
+        
+//        guard isActive, let nodeId = currentNodeId, let currentNode = dialogNodes[nodeId] else {
+//            return // No active dialog or node
+//        }
+//        
+//        // Determine the next node ID (assuming no choices here)
+//        let nextNodeId = currentNode.next // Get the 'next' ID from the current node data
+//        
+//        processNextDialogStep(nextNodeId: nextNodeId)
+    }
     
     
     private func processNextDialogStep(nextNodeId: String?) {
