@@ -22,6 +22,13 @@ struct ContentView: View {
     //    @StateObject private var dialogManager = DialogManager()
     
     @StateObject private var gameManager = GameManager()
+    @ObservedObject var uiManager: UIManager
+    
+    init() {
+        let gm = GameManager()
+        _gameManager = StateObject(wrappedValue: gm)
+        _uiManager = ObservedObject(wrappedValue: gm.uiManager)
+    }
     
     //    @State private var multiSelection = Set<UUID>()
     
@@ -32,6 +39,7 @@ struct ContentView: View {
     @State private var didAppear = false
     
     @State private var showMainSheetView: Bool = false
+    @State private var mainSheetViewDialogText: String?
     
     let selectedColor: Color = .blue
     
@@ -44,44 +52,19 @@ struct ContentView: View {
         .inspector(isPresented: $showItemInspector) {
             ItemInspectorView(showItemInspector: $showItemInspector)
         }
-        .onAppear {
-            // Run only once when the view appears
-//            if !didAppear {
-//                print("ContentView appeared. Starting intro scene...")
-////                gameManager.sceneManager.startScene(id: "intro_scene") {
-//                    print("ContentView: Intro scene completed.")
-//                }
-//                didAppear = true // Set flag so it doesn't run again
-//            }
-        }
         .onReceive(gameManager.uiManager.$isSheetPresented) { newValue in
             showMainSheetView = newValue
         }
         .sheet(isPresented: $showMainSheetView, onDismiss: {
             NotificationCenter.default.post(name: .uiSheetDidDismiss, object: nil)
-            print("Here!")
-        }) { /*item in*/
-            //            SheetContainerView(itemID: item.id)
-            //                .environmentObject(gameManager.uiManager)
-            //            SheetContainerView()
-            //                        .environmentObject(gameManager.uiManager)
-            Text("test")
+            //            print("Here!")
+        }) {
+            
+            Text(gameManager.uiManager.currentDialogNode?.text ?? "No dialog node selected")
+            
         }
-        
-        
-        
-        
-//            .onReceive(gameManager.uiManager.$isSheetPresented) { newValue in
-//                 print("ContentView (Simplified) .onReceive: isSheetPresented changed to \(newValue)")
-//            }
-        
-        //        .sheet(isPresented: $gameManager.uiManager.isSheetPresented, onDismiss: {
-        ////            NotificationCenter.default.post(name: .gameStarted, object: nil)
-        //        }, content: {
-        ////            MainSheetView(gameManager: gameManager, dialogManager: gameManager.dialogManager, showMainSheetView: $showMainSheetView)
-        //
-        //        })
     }
+        
     
     private func deleteItem(itemToDelete: ItemData) {
         modelContext.delete(itemToDelete)

@@ -40,7 +40,7 @@ struct SceneDefinition: Codable, Identifiable {
     let description: String?
     let onStartActions: [SceneAction]
     let completionCondition: SceneCompletionCondition
-    //    
+    //
 }
 
 struct SceneAction: Codable, Identifiable {
@@ -232,7 +232,12 @@ class SceneManager: ObservableObject {
                     print("   SceneManager (\(sceneId)): UIManager dismissed sheet '\(targetID)', notification posted.")
                 }
             } else { print("   ⚠️ Warning: showSheet action missing targetID.") }
-            
+        case .showDialog:
+            if let targetID = action.targetID {
+                dialogManager.startDialogSequence(id: targetID) {
+                    print("   SceneManager (\(sceneId)): DialogManager finished dialog '\(targetID)', notification posted.")
+                }
+            }
         default:
             print("🚨 SceneManager (\(sceneId)): Unsupported action type \(action.actionType). Skipping.")
             

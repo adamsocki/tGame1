@@ -177,7 +177,15 @@ class SequenceManager: ObservableObject {
     }
     
     private func stepCompleted() {
-        print("STEP COMPLETED")
+        print("SEQ COMPLETED")
+        guard activeSequenceId != nil else {
+            print("SequenceManager: stepCompleted called but no sequence is active. Ignoring.")
+            return
+        }
+        
+        // Ready to process the next step
+        isProcessingStep = false
+        processNextStep()
     }
     
 }

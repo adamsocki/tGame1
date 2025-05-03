@@ -15,7 +15,8 @@ import Foundation
 //}
 
 protocol DialogPresenter {
-    
+    func presentDialogInMainSheet(node: DialogNode, location: DialogViewLocation)
+    func dismissDialog()
 }
 enum DialogViewLocation: String, Codable {
     case sheet          = "sheet"
@@ -64,8 +65,10 @@ class DialogManager: ObservableObject
     @Published var currentText: String?
 //        @Published var currentChoices: [DialogChoice]?
     
+    private var currentNodeId: String? = nil
+    private var currentDialogRootId: String? = nil
+    private var notificationPoster: (() -> Void)?
     
-    private var currentNodeId: String?
     
     private let presenter: DialogPresenter // <- access to the UI
         
@@ -100,7 +103,51 @@ class DialogManager: ObservableObject
     private var sequenceCompletionHandler: (() -> Void)?
     
     func startDialogSequence(id: String, completion: @escaping () -> Void) {
+        print("DialogManager: Request to start sequence with root node ID: \(id)")
+        guard self.currentNodeId == nil else {
+            print("⚠️ DialogManager: Tried to start sequence '\(id)' while '\(self.currentNodeId!)' is active.")
+            completion() // Don't post notification if not started
+            return
+        }
+        guard let startingNode = getNode(by: id) else {
+            print("❌ Error: Dialog node with ID '\(id)' not found.")
+            completion() // Don't post notification if not started
+            return
+        }
         
+        self.currentNodeId = startingNode.id
+        self.currentDialogRootId = startingNode.id
+        self.notificationPoster = {
+            let rootId = self.currentDialogRootId ?? "UNKNOWN_ROOT_ID"
+            print("DialogManager: Sequence completed for root node ID '\(rootId)'.")
+            NotificationCenter.default.post(
+                name: .dialogSequenceDidEnd,
+                object: self,
+                userInfo: ["dialogId": rootId]
+            )
+            completion()
+            
+        }
+        
+        guard let location = DialogViewLocation(rawValue: startingNode.viewLocation) else {
+            print("❌ Error: Invalid viewLocation '\(startingNode.viewLocation)'. Ending sequence.")
+            endDialogSequence() // Clean up and post notification immediately
+            return
+        }
+        
+        presentInLocation(location, node: startingNode)
+        
+    }
+    
+    
+    private func presentInLocation(_ location: DialogViewLocation, node: DialogNode) {
+        
+        switch location {
+        case .main_sheet: presenter.presentDialogInMainSheet(node: node, location: .main_sheet)
+        default:
+            print("❌ Error: Presentation for location \(location.rawValue) not handled in DM.")
+            endDialogSequence()
+        }
     }
     
     func advanceDialog() {
@@ -109,7 +156,8 @@ class DialogManager: ObservableObject
     
     
     
-    
+    private func endDialogSequence() {
+    }
     
     
     
