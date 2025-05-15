@@ -12,7 +12,8 @@ import SwiftData
 
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
+//    @Environment(\.modelContext) private var modelContext
+    private var modelContext: ModelContext
     @Query private var items: [ItemData]
     
     @State var selectedItem: ItemData?
@@ -21,13 +22,18 @@ struct ContentView: View {
     //    @StateObject private var progressionManager = ProgressionManager()
     //    @StateObject private var dialogManager = DialogManager()
     
-    @StateObject private var gameManager = GameManager()
+    @StateObject private var gameManager : GameManager
     @ObservedObject var uiManager: UIManager
     
-    init() {
-        let gm = GameManager()
-        _gameManager = StateObject(wrappedValue: gm)
-        _uiManager = ObservedObject(wrappedValue: gm.uiManager)
+    init(modelContext: ModelContext) {
+//        let gm = GameManager(modelContext: modelContext)
+        self.modelContext = modelContext
+        let gm = GameManager(modelContext: modelContext)
+            _gameManager = StateObject(wrappedValue: gm)
+            _uiManager = ObservedObject(wrappedValue: gm.uiManager)
+        
+//        _gameManager = StateObject(wrappedValue: gameManager)
+//        _uiManager = ObservedObject(wrappedValue: gameManager.uiManager)
     }
     
     //    @State private var multiSelection = Set<UUID>()
@@ -48,9 +54,11 @@ struct ContentView: View {
     
     var body: some View {
         NavigationSplitView {
-            SidebarView(selectedItem: $selectedItem, uiManager: gameManager.uiManager,/*selectedUnitType: $gameManager.uiManager.currentUnitTypeSelected,*/ )
+            SidebarView(selectedItem: $selectedItem, uiManager: gameManager.uiManager, gameStateManager: gameManager.gameStateManager)
+                
         } detail: {
             ConsoleAndDetailView(selectedItem: $selectedItem, gameManager: gameManager)
+            
         }
         .inspector(isPresented: $showItemInspector) {
             ItemInspectorView(showItemInspector: $showItemInspector)
@@ -58,6 +66,7 @@ struct ContentView: View {
         .onReceive(gameManager.uiManager.$isSheetPresented) { newValue in
             showMainSheetView = newValue
         }
+        
         .sheet(isPresented: $showMainSheetView, onDismiss: {
             NotificationCenter.default.post(name: .uiSheetDidDismiss, object: nil)
             //            print("Here!")
@@ -86,6 +95,9 @@ struct ContentView: View {
             }
             .interactiveDismissDisabled()
             
+        }
+        .onReceive(gameManager.timeManager.timer) { _ in
+            gameManager.timeManager.UpdateTimeManager()
         }
         
         

@@ -13,6 +13,7 @@ struct SequenceStep: Codable {
     enum StepType: String, Codable {
         case startScene
         case assignQuest
+        case setGameState
     }
     
     let stepType: StepType
@@ -51,6 +52,7 @@ typealias SequenceCollection = [String: SequenceDefinition]
 class SequenceManager: ObservableObject {
     
     private let sceneManager: SceneManager
+    private let questManager: QuestManager
     
     private var sequenceDefinitions: SequenceCollection = [:]
     private var activeSequenceId: String? = nil
@@ -60,8 +62,9 @@ class SequenceManager: ObservableObject {
     // Optional: Completion handler for the entire sequence
     private var sequenceCompletionHandler: (() -> Void)?
     
-    init(sceneManager: SceneManager, fileName: String = "sequences.json") {
+    init(sceneManager: SceneManager, questManager: QuestManager, fileName: String = "sequences.json") {
         self.sceneManager = sceneManager
+        self.questManager = questManager
         self.sequenceDefinitions = loadSequenceDefinitions(from: fileName)
     }
     
@@ -132,7 +135,6 @@ class SequenceManager: ObservableObject {
         }
         
         isProcessingStep = true // Indicate we are actively processing this transition
-        
         currentStepIndex += 1 // Move to the next step index
         
         // Check if we've completed all steps
@@ -162,7 +164,7 @@ class SequenceManager: ObservableObject {
             sceneManager.startScene(id: sceneId) { [weak self] in
                 // Ensure this callback pertains to the currently active sequence
                 guard let self = self, self.activeSequenceId == currentId else {
-                    print("   SequenceManager (\(currentId ?? "-")): Completion received for scene '\(sceneId)' but sequence changed/stopped. Ignoring.")
+                    print("   SequenceManager (\(currentId)): Completion received for scene '\(sceneId)' but sequence changed/stopped. Ignoring.")
                     return
                 }
                 print("   SequenceManager (\(currentId)): Completion received for scene '\(sceneId)' (Step \(self.currentStepIndex + 1))")
@@ -170,8 +172,22 @@ class SequenceManager: ObservableObject {
             }
             // For startScene, step is NOT completed immediately. We wait for the callback.
             isProcessingStep = false // Ready for the completion callback
+        
+            
         case .assignQuest:
             print("Assign quest triggered in SequenceManager")
+            guard let questID = step.questId else {
+                stepCompletedImmediately = true
+                print("   ❌ Sequence Managager error: Step \(currentStepIndex + 1) is 'assign Quest' but missing questID.  skipping")
+                break
+            }
+            // --- CALL QUEST MANAGER =====
+//            questManager.startQuest(id: questID) { [weak self] in
+//                
+//                
+//            }
+//        
+        
         default:
             print("   ⚠️ SequenceManager Warning: Unhandled step type '\(step.stepType)' at step \(currentStepIndex + 1). Skipping.")
             stepCompletedImmediately = true // Skip unknown steps

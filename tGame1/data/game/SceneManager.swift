@@ -35,14 +35,6 @@ struct SceneCompletionCondition: Codable {
     // let conditions: [SceneCompletionCondition]? // For allOf/anyOf types
 }
 
-struct SceneDefinition: Codable, Identifiable {
-    var id: String? = ""
-    let description: String?
-    let onStartActions: [SceneAction]
-    let completionCondition: SceneCompletionCondition
-    let userDismissable: Bool?
-    //
-}
 
 struct SceneAction: Codable, Identifiable {
     let id: String
@@ -52,6 +44,14 @@ struct SceneAction: Codable, Identifiable {
     
 }
 
+struct SceneDefinition: Codable, Identifiable {
+    var id: String? = ""
+    let description: String?
+    let onStartActions: [SceneAction]
+    let completionCondition: SceneCompletionCondition
+    let userDismissable: Bool?
+    
+}
 typealias SceneCollection = [String: SceneDefinition]
 
 

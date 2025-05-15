@@ -43,19 +43,15 @@ class QuestManager: ObservableObject {
     //    @Published var questNodes: [QuestNode] = []
     private var questDefinitions: [String: QuestData] = [:]
     
-    @Published var activeQuests: [QuestType: Quest] = [:]
-    @Published var completedQuests: Set<QuestType> = []
+//    @Published var activeQuests: [QuestType: Quest] = [:]
+//    @Published var completedQuests: Set<QuestType> = []
     
     
     init(filename: String = "quests.json") {
         loadQuestDefinitions(from: filename)
-        //
-        
         
     }
     
-    
-    //
     
     
     
@@ -84,69 +80,69 @@ class QuestManager: ObservableObject {
         }
     }
     
-    func getQuestDefinition(for type: QuestType) -> QuestData? {
-        return questDefinitions[type.rawValue]
-    }
-    
-    func checkQuestPrequisites(prerequisites: [String]?) -> Bool {
-        
-        if prerequisites == nil || prerequisites!.isEmpty{
-            return true
-        }
-        for preq in prerequisites!{
-            if !completedQuests.contains(QuestType(rawValue: preq)!){
-                return false
-            }
-        }
-        return true
-    }
-    
-    
-    func offerQuest(_ type: QuestType) {
-        guard activeQuests[type] == nil && !completedQuests.contains(type) else {
-            print("quest \(type.rawValue) is already active or completed")
-            return
-        }
-        
-        guard let questDefinition = getQuestDefinition(for: type) else {
-            print("No quest definition found for \(type.rawValue)")
-            return
-        }
-        
-        // Check for Quest Prerequisites
-        let prerequisitesMet = checkQuestPrequisites(prerequisites: questDefinition.prerequisites)
-        guard prerequisitesMet else {
-            print("no can do, prerequisites not met for \(type.rawValue)")
-            return
-        }
-        
-        acceptQuest(type)
-    }
-    
-    func acceptQuest(_ type: QuestType) {
-        print("quest accepted \(type.rawValue)")
-        
-        guard let newQuest = createInGameQuest(for: type) else {
-            print("No accept Quest for \(type.rawValue)")
-            return
-        }
-        
-        activeQuests[type] = newQuest
-        
-    }
-    
-    
-    
-    func createInGameQuest(for type: QuestType) -> Quest? {
-        
-        guard let definition = getQuestDefinition(for: type) else {
-            print( "No quest definition found for \(type.rawValue)")
-            return nil
-        }
-        
-        let newQuest = Quest(data: definition)
-        return newQuest
-    }
+//    func getQuestDefinition(for type: QuestType) -> QuestData? {
+//        return questDefinitions[type.rawValue]
+//    }
+//    
+//    func checkQuestPrequisites(prerequisites: [String]?) -> Bool {
+//        
+//        if prerequisites == nil || prerequisites!.isEmpty{
+//            return true
+//        }
+//        for preq in prerequisites!{
+//            if !completedQuests.contains(QuestType(rawValue: preq)!){
+//                return false
+//            }
+//        }
+//        return true
+//    }
+//    
+//    
+//    func offerQuest(_ type: QuestType) {
+//        guard activeQuests[type] == nil && !completedQuests.contains(type) else {
+//            print("quest \(type.rawValue) is already active or completed")
+//            return
+//        }
+//        
+//        guard let questDefinition = getQuestDefinition(for: type) else {
+//            print("No quest definition found for \(type.rawValue)")
+//            return
+//        }
+//        
+//        // Check for Quest Prerequisites
+//        let prerequisitesMet = checkQuestPrequisites(prerequisites: questDefinition.prerequisites)
+//        guard prerequisitesMet else {
+//            print("no can do, prerequisites not met for \(type.rawValue)")
+//            return
+//        }
+//        
+//        acceptQuest(type)
+//    }
+//    
+//    func acceptQuest(_ type: QuestType) {
+//        print("quest accepted \(type.rawValue)")
+//        
+//        guard let newQuest = createInGameQuest(for: type) else {
+//            print("No accept Quest for \(type.rawValue)")
+//            return
+//        }
+//        
+//        activeQuests[type] = newQuest
+//        
+//    }
+//    
+//    
+//    
+//    func createInGameQuest(for type: QuestType) -> Quest? {
+//        
+//        guard let definition = getQuestDefinition(for: type) else {
+//            print( "No quest definition found for \(type.rawValue)")
+//            return nil
+//        }
+//        
+//        let newQuest = Quest(data: definition)
+//        return newQuest
+//    }
     
     
 }

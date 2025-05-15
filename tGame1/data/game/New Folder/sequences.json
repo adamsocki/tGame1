@@ -3,11 +3,12 @@
 {
     "intro_sequence": {
         "steps": [
-            { "id": "1", "stepType": "startScene",  "sceneId": "scene_showMySheet" },
-            { "id": "2", "stepType": "startScene",  "sceneId": "scene_showMyDialog1" },
-            { "id": "3", "stepType": "startScene",  "sceneId": "scene_showMyDialog2" },
-            { "id": "4", "stepType": "startScene",  "sceneId": "scene_dismiss_main_sheet" },
-            { "id": "5", "stepType": "assignQuest", "questID": "init_quest"}
+            { "id": "1", "stepType": "startScene",   "sceneId": "scene_showMySheet" },
+            { "id": "2", "stepType": "startScene",   "sceneId": "scene_showMyDialog1" },
+            { "id": "3", "stepType": "startScene",   "sceneId": "scene_showMyDialog2" },
+            { "id": "4", "stepType": "startScene",   "sceneId": "scene_dismiss_main_sheet" },
+            { "id": "6", "stepType": "setGameState", "stateId": "init_game_state"},
+            { "id": "5", "stepType": "assignQuest",  "questID": "init_quest"}
             
         ]
     }

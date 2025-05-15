@@ -6,7 +6,6 @@
 //
 
 
-
 import SwiftUI
 import SwiftData
 
@@ -16,16 +15,15 @@ struct SidebarView: View {
     @Environment(\.modelContext) private var modelContext
     
     @Binding var selectedItem: ItemData?
-//    @Binding var selectedUnitType: UnitType?
     
-//    @Binding var gameManager: GameManager
     @ObservedObject var uiManager: UIManager
-    
-//    @Binding var selectedPerson: PersonData?
-    
-//    @State var selectedUnitType: UnitType?
+    @ObservedObject var gameStateManager: GameStateManager
     
     let selectedColor: Color = .blue
+    
+//    @Binding var selectedUnitType: UnitType?
+//    @Binding var selectedPerson: PersonData?
+//    @State var selectedUnitType: UnitType?
     
     var body: some View {
         ZStack {
@@ -34,20 +32,23 @@ struct SidebarView: View {
                 HStack {
                     ForEach(UnitType.allCases) { unitType in
                         
-                        Button(action: {
-                            uiManager.currentUnitTypeSelected = unitType
-                        }, label: {
-                            let labelView = Label("", systemImage: unitType.systemImageName)
-                            if uiManager.currentUnitTypeSelected == unitType {
-                                labelView
-                                    .foregroundStyle(selectedColor)
-                            }
-                            else {
-                                labelView
-                            }
-                        })
-                        .buttonStyle(.borderless)
-                        .foregroundStyle(.gray)
+                        if (gameStateManager.activeTypes.isActive(unitType: unitType))
+                        {
+                            Button(action: {
+                                uiManager.currentUnitTypeSelected = unitType
+                            }, label: {
+                                let labelView = Label("", systemImage: unitType.systemImageName)
+                                if uiManager.currentUnitTypeSelected == unitType {
+                                    labelView
+                                        .foregroundStyle(selectedColor)
+                                }
+                                else {
+                                    labelView
+                                }
+                            })
+                            .buttonStyle(.borderless)
+                            .foregroundStyle(.gray)
+                        }
                     }
                 }
                 .padding(.horizontal, 10)
@@ -61,7 +62,7 @@ struct SidebarView: View {
                 case .house:
                     ItemSidebarView(selectedItem: $selectedItem)
                 case .cat:
-                    Text("Trash")
+                    Text("Trash_meow")
                     Spacer()
                 default:
                     Text("Default")

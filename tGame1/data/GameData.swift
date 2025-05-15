@@ -11,8 +11,12 @@ import SwiftData
 @Model
 final class GameData {
     var score: Int
+    var persons: [PersonData]
     
     init(score: Int) {
         self.score = score
+        self.persons = []
+//        self.persons.append(PersonData(age: 37, name: "Adam Socki"))
+
     }
 }
