@@ -55,6 +55,9 @@ struct PersonDetailView: View {
     
     var body: some View {
         
+        
+        
+        
         if let personSelected = uiManager.currentPersonSelected {
 //            print("Person Selected: \(personSelected)")
             
@@ -102,7 +105,11 @@ struct PersonDetailView: View {
                         }, label :  {
                             Text("Energy Boost")
                         })
+                        
+//                        if (personSelected.canRest)
+                        LocationView()
                         Spacer()
+                        
                     }
                     
                     

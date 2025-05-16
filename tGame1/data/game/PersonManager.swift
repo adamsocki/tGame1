@@ -46,8 +46,25 @@ class PersonManager: ObservableObject
             return
         }
         print(gameDataInstance)
+        
         for person in gameDataInstance.persons {
+            
+            // **** UPDATE ENERGY ***** //
+            
             person.UpdateEnergy(-1 * Float((gameManager?.timeManager.deltaTime)!))
+            
+            
+            
+            
+            
+//            // **** UPDATE CHECK REST CONDITIONS ***** //
+//            if (person.getLocationInfo() == .restLocation)
+//            {
+//                person.canRest = true
+//            }
+//            else{
+//                person.canRest = false
+//            }
         }
     }
     

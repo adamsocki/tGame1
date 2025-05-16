@@ -36,7 +36,10 @@ final class PersonData: Identifiable {
     var position : Vector3?
     var hunger: Float?
     
+    var canRest: Bool? = false
+    
     var energyDepletionRate: Float = 0.1
+    
     
     
     init (age: Int, name: String, position: Vector3 = Vector3()) {
